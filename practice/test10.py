@@ -1,0 +1,42 @@
+"""
+ZetCode PyQt5 tutorial
+
+This program creates a context menu.
+
+Author: Jan Bodnar
+Website: zetcode.com
+Last edited: August 2017
+"""
+
+import sys
+from PyQt5.QtWidgets import QMainWindow, qApp, QMenu, QApplication
+
+
+class Example(QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        self.setGeometry(300, 300, 800, 450)
+        self.setWindowTitle('Context menu')
+        self.show()
+
+    def contextMenuEvent(self, event):    # Overrinding this function with new content
+        cmenu = QMenu(self)
+
+        newAct = cmenu.addAction("New")
+        opnAct = cmenu.addAction("Open")
+        quitAct = cmenu.addAction("Quit")
+        action = cmenu.exec_(self.mapToGlobal(event.pos()))     # adding action to work
+
+        if action == quitAct:
+            qApp.quit()     # to quit application
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
