@@ -17,9 +17,10 @@ time = 0
 while True:
     mx = max(dt_ind, key=lambda x: x[1])
     first = dt_ind[0]
-    if first[1] < mx[1]:
+    while first[1] < mx[1]:
         rotate(dt_ind)
-    else:
+        first = dt_ind[0]
+    if first[1] == mx[1]:
         time += 1
         if first[0] == k:
             break
