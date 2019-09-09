@@ -20,10 +20,10 @@ while True:
     while first[1] < mx[1]:
         rotate(dt_ind)
         first = dt_ind[0]
-    if first[1] == mx[1]:
-        time += 1
-        if first[0] == k:
-            break
-        else:
-            dt_ind.pop(0)
+
+    time += 1
+    if first[0] == k:
+        break
+    else:
+        dt_ind.pop(0)
 print(time)
