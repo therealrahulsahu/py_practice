@@ -1,8 +1,3 @@
-def rotate(arr):
-    var = arr.pop(0)
-    arr.append(var)
-
-
 n = int(input('Enter n : '))
 data = list(map(int, input('Enter Array : ').split()[:n]))
 k = int(input('Enter k :'))
@@ -18,7 +13,8 @@ while True:
     mx = max(dt_ind, key=lambda x: x[1])
     first = dt_ind[0]
     while first[1] < mx[1]:
-        rotate(dt_ind)
+        var = dt_ind.pop(0)
+        dt_ind.append(var)
         first = dt_ind[0]
 
     time += 1
