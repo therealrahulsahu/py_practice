@@ -11,14 +11,11 @@ for x in data:
 time = 0
 while True:
     mx = max(dt_ind, key=lambda x: x[1])
-    first = dt_ind[0]
-    while first[1] < mx[1]:
-        var = dt_ind.pop(0)
-        dt_ind.append(var)
-        first = dt_ind[0]
+    while dt_ind[0][1] < mx[1]:
+        dt_ind.append(dt_ind.pop(0))
 
     time += 1
-    if first[0] == k:
+    if dt_ind[0][0] == k:
         break
     else:
         dt_ind.pop(0)
