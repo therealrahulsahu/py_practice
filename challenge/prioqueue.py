@@ -12,8 +12,7 @@ i = 0
 for x in data:
     dt_ind.append((i, x))
     i += 1
-dist_pri = sorted(list(set(data)), reverse=True)
-# print(*dt_ind, sep='\t')
+
 time = 0
 while True:
     mx = max(dt_ind, key=lambda x: x[1])
