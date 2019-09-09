@@ -1,7 +1,6 @@
 n = int(input('Enter n : '))
 data = list(map(int, input('Enter Array : ').split()[:n]))
 k = int(input('Enter k :'))
-my_pri = data[k]
 dt_ind = []
 i = 0
 for x in data:
