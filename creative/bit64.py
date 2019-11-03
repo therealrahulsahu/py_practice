@@ -1,28 +1,42 @@
-class ValueError(ValueError):
-    def __init__(self, message=''):
-        self.message = message
-
-    def __str__(self):
-        return self.message
-
-
 class Bit64:
     bit_string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-'
     number_int = 0
     number_64bit = ''
     number_binary = ''
-    binary_length = 0
+
+    class InvalidUserStringError(Exception):
+        def __init__(self, message='Insufficient literals in user_string'):
+            self.message = message
+
+        def __str__(self):
+            return self.message
+
+    class NegativeNoError(Exception):
+        def __init__(self, message = 'Negative Not Allowed'):
+            self.message = message
+
+        def __str__(self):
+            return self.message
+
+    class InvalidBit64Error(Exception):
+        def __init__(self, message='Invalid 64bit No. '):
+            self.message = message
+
+        def __str__(self):
+            return self.message
 
     def __init__(self, n, user_string='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-'):
         self.bit_string = user_string
         if len(self.bit_string) != 64:
-            raise ValueError(message='Insufficient literals in user_string')
-        if isinstance(n, int) and n >= 0:
+            raise self.InvalidUserStringError
+        if isinstance(n, int):
+            if n < 0:
+                raise self.NegativeNoError
             self.number_int = n
             self.number_binary = bin(n).replace('0b', '')
-            self.binary_length = len(self.number_binary)
-            i = self.binary_length % 6
-            pair6 = self.binary_length // 6
+            binary_length = len(self.number_binary)
+            i = binary_length % 6
+            pair6 = binary_length // 6
             num_set = list()
             var = self.number_binary[0:i]
             if var:
@@ -33,8 +47,21 @@ class Bit64:
                 pair6 -= 1
             for x in num_set:
                 self.number_64bit += self.bit_string[int(x, 2)]
+        elif isinstance(n, str):
+            if not n:
+                raise self.InvalidBit64Error
+            for x in n:
+                if x not in self.bit_string:
+                    raise self.InvalidBit64Error
+            self.number_64bit = n
+            self.number_int = 0
+            i = 0
+            for x in reversed(self.number_64bit):
+                self.number_int += self.bit_string.index(x) * (64**i)
+                i += 1
+            self.number_binary = bin(self.number_int)
         else:
-            raise ValueError(message='Unidentified datatype')
+            raise ValueError
 
     def __str__(self):
         return self.number_64bit
@@ -101,7 +128,10 @@ class Bit64:
 
 
 def main():
-    print(not Bit64(''))
+    try:
+        print(Bit64('{', user_string='{'))
+    except Bit64.InvalidBit64Error:
+        print('Welcome')
 
 
 if __name__ == '__main__':
