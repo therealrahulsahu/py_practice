@@ -27,7 +27,7 @@ for file_name in files:
         lib_data.append(Library(lib_id, lib_meta, books))
     data_file.close()
 
-    sort_lib = sorted(lib_data, key=lambda x: (-(1/x.n_sign_days)*x.n_books*x.books_per_day))
+    sort_lib = sorted(lib_data, key=lambda x: (-1*(1/x.n_sign_days)*x.n_books*x.books_per_day))
 
     books_queue = []
 
@@ -72,4 +72,3 @@ for file_name in files:
 
     with open('out_'+file_name, 'w') as out_file:
         out_file.write(out_str)
-        out_file.close()
