@@ -12,7 +12,7 @@ class Bit64:
             return self.message
 
     class NegativeNoError(Exception):
-        def __init__(self, message = 'Negative Not Allowed'):
+        def __init__(self, message='Negative Not Allowed'):
             self.message = message
 
         def __str__(self):
@@ -129,7 +129,7 @@ class Bit64:
 
 def main():
     try:
-        print(Bit64('{', user_string='{'))
+        print(int(Bit64('ZmcBC9-wAXM')))
     except Bit64.InvalidBit64Error:
         print('Welcome')
 
