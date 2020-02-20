@@ -27,7 +27,7 @@ for file_name in files:
         lib_data.append(Library(lib_id, lib_meta, books))
     data_file.close()
 
-    sort_lib = lib_data#sorted(lib_data, key=lambda x: x.n_sign_days)
+    sort_lib = sorted(lib_data, key=lambda x: (-(1/x.n_sign_days)*x.n_books*x.books_per_day))
 
     books_queue = []
 
