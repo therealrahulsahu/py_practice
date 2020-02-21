@@ -5,7 +5,7 @@ class Library:
         self.n_sign_days = meta[1]
         self.books_per_day = meta[2]
 
-        self.book_id_sc = book_code
+        self.book_id = book_code
         self.days_left = 0
 
 
@@ -33,42 +33,41 @@ for file_name in files:
 
     days_left = n_days
     to_execute = []
+    out_str = ''
+    lib_count = 0
     for lib in sort_lib:
-        in_books = lib.book_id_sc
-        curr_queue = []
-        for x in in_books:
-            if x not in books_queue:
-                books_queue.append(x)
-                curr_queue.append(x)
+        in_books = lib.book_id.copy()
+        selected_books = []
+        left_books = []
+        while in_books:
+            first = in_books.pop(0)
+            if first not in books_queue:
+                books_queue.append(first)
+                selected_books.append(first)
+            else:
+                left_books.append(first)
+        selected_books.extend(left_books)
 
-        for x in lib.book_id_sc:
-            if x not in curr_queue:
-                curr_queue.append(x)
+        lib.book_id = selected_books.copy()
 
-        lib.book_id_sc = curr_queue
-
-        if (days_left - lib.n_sign_days > 0) and (len(lib.book_id_sc) > 0):
+        if (days_left - lib.n_sign_days > 0) and (len(lib.book_id) > 0):
             lib.days_left = days_left - lib.n_sign_days
             days_left -= lib.n_sign_days
-            to_execute.append(lib)
+
+            lib_count += 1
+            out_lib_id = lib.lib_id
+            out_n_book = lib.days_left * lib.books_per_day
+            if out_n_book > lib.n_books:
+                out_n_book = lib.n_books
+            out_str += str(out_lib_id) + ' ' + str(out_n_book) + '\n'
+            out_books_arr = lib.book_id[:out_n_book]
+            for x in out_books_arr:
+                out_str += str(x) + ' '
+            out_str += '\n'
         else:
             break
 
-    out_str = ''
-
-    out_n_lib = len(to_execute)
-    out_str += str(out_n_lib)+'\n'
-    for lib in to_execute:
-        out_lib_id = lib.lib_id
-        out_n_book = lib.days_left*lib.books_per_day
-        if out_n_book > lib.n_books:
-            out_n_book = lib.n_books
-        out_str += str(out_lib_id)+' '+str(out_n_book) + '\n'
-        out_books_arr = lib.book_id_sc[:out_n_book]
-
-        for x in out_books_arr:
-            out_str += str(x)+' '
-        out_str += '\n'
+    out_str = str(lib_count)+'\n' + out_str
 
     with open('out_'+file_name, 'w') as out_file:
         out_file.write(out_str)
