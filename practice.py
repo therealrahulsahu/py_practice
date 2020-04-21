@@ -1,41 +1,38 @@
-S = 0
-E = 1
-I = 2
-C, N, K = list(map(int, input().split()))
-data = []
-for x in range(N):
-  ls = list(map(int, input().split()))
-  data.append([ls[0], ls[1], x])
-data.sort(key=lambda x: (x[0], x[1]))
+import re
+import time
+with open('EnglishDictionary.csv', 'r') as file:
+    data_txt = file.read()
+data = [[x.split(',')[0],int(x.split(',')[1])] for x in data_txt.split('\n')]
 
-result = True
-i = 0
-conf = 0
 
-while i < N - 1:
-    j = i + 1
-    while j < N:
-        if data[i][E] >= data[j][S]:
-            conf += 1
+def filter_data(values, tm):
+    reg = re.compile(r'(?i)^'+tm)
+    output = []
+    first = False
+    for x in values:
+        if reg.match(x[0]):
+            output.append(x)
+            first = True
         else:
-            break
-        j += 1
-    i += 1
+            if first:
+                break
+    return output
 
-if K:
-    if conf == 0:
-        result = True
-    elif conf == 2:
-        result = False
-    elif conf == 1:
-        result = False
-else:
-    if conf:
-        result = False
+
+user = ''
+while True:
+    inp = input()
+    if inp == '#':
+        break
+    user += inp
+    st = time.time()
+    data = filter_data(data, user)
+    result = sorted(data, key=lambda x: x[1], reverse=True)[:5]
+    en = time.time()
+    total = int((en-st)*(10**6))
+    if len(result) > 0:
+        print(*[x[0] for x in result], sep=', ', end='\t\t{}\n'.format(total))
     else:
-        result = True
-
-if result:
-    print("Good")
-else:
-    print("Bad")
+        print('No match Found !! \t\t{}'.format(total))
+        break
+print('Exiting')

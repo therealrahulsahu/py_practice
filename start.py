@@ -1,78 +1,48 @@
-import re
-import os
+m, k = list(map(int, input().split()))
+b = list(map(int, input().split()[:m]))*10
+k = 13
 
+total = sum(b)
+avg = total / k
+time = [0]*k
+out = [[] for _ in range(k)]
 
-def file_py(var):
-    patt = re.compile(r'^(.+)(\.py)$')
-    if patt.match(var):
-        return True
+i = 0
+left = 0
+while b:
+    book = b.pop(0)
+    if time[i]+book > avg:
+        i += 1
+
+    if i == k:
+        i = k-1
+
+    out[i].append(book)
+    time[i] += book
+
+every = False
+while not every:
+    any = False
+    i = len(out) - 1
+    while i > 0:
+        if sum(out[i][1:]) < avg:
+            i -= 1
+        else:
+            l = out[i-1]
+            r = out[i]
+            l.append(r.pop(0))
+            any = True
+    if not any:
+        every = False
+
+for x in out:
+    print(sum(x), end=' ')
+print()
+
+while out:
+    res = out.pop(0)
+    print(*res, end='')
+    if len(out):
+        print(' / ', end='')
     else:
-        return False
-
-
-def file_jpg(var):
-    patt = re.compile(r'^(.+)(\.jpg)$')
-    if patt.match(var):
-        return True
-    else:
-        return False
-
-
-def run_python(add):
-    for x in os.walk(add):
-        for y in filter(file_py,x[2]):
-            temp = 'python \"'+x[0]+'\\'+y+'\"'
-            os.system(temp)
-
-
-def run_jpg(add):
-    for x in os.walk(add):
-        for y in filter(file_jpg, x[2]):
-            temp = '\"'+x[0]+'\\'+y+'\"'
-            os.system(temp)
-
-
-
-def trave_py(add):
-    os.chdir(add)
-    content = os.listdir()
-    for x in filter(file_py, content):
-        os.system('python \"{}\"'.format(x))
-    for x in filter(os.path.isdir, content):
-        trave_py(x)
-        os.chdir('..')
-
-
-def trave_jpg(add):
-    os.chdir(add)
-    content = os.listdir()
-    for x in filter(file_jpg, content):
-        # os.system('\"{}\"'.format(x))
-        print(os.path.abspath(x))
-    for x in filter(os.path.isdir, content):
-        trave_jpg(x)
-        os.chdir('..')
-
-
-def specific_add(add, patt, out):
-    os.chdir(add)
-    for x in os.listdir():
-        if os.path.isfile(x):
-            if patt.search(x):
-                out.append(os.path.abspath(x))
-        elif os.path.isdir(x):
-            if patt.search(x):
-                out.append(os.path.abspath(x))
-            specific_add(x, patt, out)
-            os.chdir('..')
-
-
-data = []
-sea=input('Enter patt to search: ')
-specific_add('d:\\media\\', re.compile(r'{}'.format(sea), re.I), data)
-print(*data, sep='\n')
-
-#trave_jpg('D:\\Media\\Pictures\\Photo')
-#os.chdir('d:\\rahul code\\python\\rahul')
-#print(*list(filter(os.path.isdir,os.listdir('d:\\rahul code\\python\\rahul'))))
-#print(*os.listdir('d:\\rahul code\\python\\rahul'),sep='\n')
+        print()
