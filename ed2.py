@@ -18,10 +18,19 @@ def sub(values):
 
 
 def contain(cnt, entry):
-    cnt.append(entry)
-    cnt.sort(key=lambda x: x[1], reverse=True)
-    if len(cnt) > 5:
-        cnt.pop()
+    name = entry[0]
+    i = 0
+    for x in cnt:
+        if x[0] == name:
+            x[1] = max(entry[1], x[1])
+            cnt.sort(key=lambda x: x[1], reverse=True)
+            break
+        i += 1
+    if i == len(cnt):
+        cnt.append(entry)
+        cnt.sort(key=lambda x: x[1], reverse=True)
+        if len(cnt) > 5:
+            cnt.pop()
 
 
 def filter_data(values, sch):
@@ -38,7 +47,7 @@ def filter_data(values, sch):
                 contain(output, [x[0], 1.5 * ln * x[1]])
             if reg_st.search(x[0]):
                 contain(output, [x[0], 2 * ln * x[1]])
-    return set([x[0] for x in output])
+    return [x[0] for x in output]
 
 
 user = input()
