@@ -1,38 +1,45 @@
 import re
-import time
 with open('EnglishDictionary.csv', 'r') as file:
     data_txt = file.read()
 data = [[x.split(',')[0], int(x.split(',')[1])] for x in data_txt.split('\n')]
 
 
-def filter_data(values, tm):
-    reg = re.compile(r'(?i)^'+tm)
+def sub(values):
+    n = len(values)
     output = []
-    first = False
+    for Len in range(1, n + 1):
+        for i in range(n - Len + 1):
+            j = i + Len - 1
+            st = ''
+            for k in range(i, j + 1):
+                st += values[k]
+            output.append(st)
+    return list(reversed(output))
+
+
+def contain(cnt, entry):
+    cnt.append(entry)
+    cnt.sort(key=lambda x: x[1], reverse=True)
+    if len(cnt) > 5:
+        cnt.pop()
+
+
+def filter_data(values, sch):
+    output = []
     for x in values:
-        if reg.match(x[0]):
-            output.append(x)
-            first = True
-        else:
-            if first:
-                break
-    return output
+        for tm in sch:
+            ln = len(tm)
+            reg = re.compile(r'(?i)'+'.*'.join(list(tm)))
+            reg_seq = re.compile(r'(?i)'+tm)
+            reg_st = re.compile(r'(?i)^'+tm)
+            if reg.search(x[0]):
+                contain(output, [x[0], ln*x[1]])
+            if len(tm) > 1 and reg_seq.search(x[0]):
+                contain(output, [x[0], 1.5 * ln * x[1]])
+            if reg_st.search(x[0]):
+                contain(output, [x[0], 2 * ln * x[1]])
+    return [x[0] for x in output]
 
 
-user = ''
-while True:
-    inp = input()
-    if inp == '#':
-        break
-    user += inp
-    st = time.time()
-    data = filter_data(data, user)
-    result = sorted(data, key=lambda x: x[1], reverse=True)[:5]
-    en = time.time()
-    total = int((en-st)*(10**6))
-    if len(result) > 0:
-        print(*[x[0] for x in result], sep=', ', end='\t\t{}\n'.format(total))
-    else:
-        print('No match Found !! \t\t{}'.format(total))
-        break
-print('Exiting')
+user = input()
+print(*filter_data(data, sub(user)), sep=', ')
