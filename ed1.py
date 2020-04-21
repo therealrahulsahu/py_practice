@@ -36,3 +36,5 @@ while True:
         print('No match Found !! \t\t{}'.format(total))
         break
 print('Exiting')
+
+exit_now = input('Press Enter to exit')

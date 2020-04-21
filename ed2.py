@@ -38,8 +38,10 @@ def filter_data(values, sch):
                 contain(output, [x[0], 1.5 * ln * x[1]])
             if reg_st.search(x[0]):
                 contain(output, [x[0], 2 * ln * x[1]])
-    return [x[0] for x in output]
+    return set([x[0] for x in output])
 
 
 user = input()
 print(*filter_data(data, sub(user)), sep=', ')
+
+exit_now = input('Press Enter to exit')
