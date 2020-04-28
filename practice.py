@@ -1,6 +1,6 @@
 import re
 import time
-with open('EnglishDictionary.csv', 'r') as file:
+with open('bobble_ai/EnglishDictionary.csv', 'r') as file:
     data_txt = file.read()
 data = [[x.split(',')[0],int(x.split(',')[1])] for x in data_txt.split('\n')]
 
